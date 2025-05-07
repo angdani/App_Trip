@@ -8,6 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.navigation.compose.*
 import com.danielpons.aplicacionviajes.screen.HomeScreen.HomeScreen
+import com.danielpons.aplicacionviajes.screen.HomeScreen.ProfileScreen
+import com.danielpons.aplicacionviajes.screen.loginScreen.LoginScreen
+import com.danielpons.aplicacionviajes.screen.loginScreen.RegisterUserScreen
+import com.danielpons.aplicacionviajes.screen.tripDetailsScreen.TripDetailsScreen
 import com.danielpons.aplicacionviajes.ui.theme.AplicacionViajesTheme
 
 
@@ -34,5 +38,14 @@ fun MyApp() {
             TripDetailsScreen(tripId)
         }
         composable("add_trip") { AddTripScreen(navController, onDismiss = { navController.popBackStack() }) }
+        composable("login") {
+            LoginScreen(navController, onLoginSuccess = { navController.navigate("home") })
+        }
+        composable("register_user") {
+            RegisterUserScreen(navController)
+        }
+        composable ("profile"){
+            ProfileScreen(navController)
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.danielpons.aplicacionviajes.screen
+package com.danielpons.aplicacionviajes.screen.tripDetailsScreen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

@@ -1,0 +1,26 @@
+package com.danielpons.aplicacionviajes.data.model
+
+import kotlinx.datetime.Instant
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class TripParticipant(
+    val id_participant: Int? = null,
+    val id_trip: Int,
+    val id_user: Long,
+    val role: ParticipantRole = ParticipantRole.OWNER,
+    val joined_at: Instant? = null,
+    val invitation_status: InvitationStatus = InvitationStatus.ACCEPTED,
+    // Sync fields
+    val is_dirty: Boolean = false,
+    val last_modified: Instant? = null,
+    val server_id: Int? = null
+){
+    enum class ParticipantRole {
+        OWNER, EDITOR, VIEWER
+    }
+    enum class InvitationStatus {
+        ACCEPTED, PENDING, REJECTED
+    }
+}
+

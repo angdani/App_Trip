@@ -1,24 +1,36 @@
 [versions]
 agp = "8.8.2"
+androidxJunit = "1.2.1"
+converterGson = "2.9.0"
 core = "1.3.2"
 kotlin = "2.0.0"
-coreKtx = "1.15.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinxCoroutinesTest = "1.10.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.03.00"
+composeBom = "2025.04.00"
+mockitoCore = "5.14.2"
+mockitoKotlin = "4.0.0"
 navigationCompose = "2.8.9"
-navigationRuntimeAndroid = "2.9.0-alpha08"
+navigationRuntimeAndroid = "2.9.0-beta01"
 postgrest = "3.1.3"
-runtimeSavedInstanceState = "1.0.0-alpha11"  # Actualiza la versión aquí
+retrofit = "2.9.0"
+runtimeSavedInstanceState = "1.0.0-alpha11"
+junitJunit = "4.13.2"
+coreKtxVersion = "1.6.1"
+navigationTesting = "2.8.9"  # Actualiza la versión aquí
 
 
 [libraries]
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-junit-v113 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 auth = { module = "io.github.jan-tennert.supabase-kt:auth", version.ref = "core" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 core = { module = "io.github.jan-tennert.supabase-kt:core", version.ref = "core" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -34,8 +46,15 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 postgrest = { module = "io.github.jan-tennert.supabase-kt:postgrest", version.ref = "postgrest" }
 androidx-runtime-saved-instance-state = { group = "androidx.compose.runtime", name = "runtime-saved-instance-state", version.ref = "runtimeSavedInstanceState" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
+androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "navigationTesting" }
 
 
 [plugins]

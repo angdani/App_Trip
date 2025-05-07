@@ -1,6 +1,8 @@
 package com.danielpons.aplicacionviajes.data.connection
 
+import com.danielpons.aplicacionviajes.data.supabase.MySessionManager
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 

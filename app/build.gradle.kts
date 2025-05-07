@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0" // Agrega esta línea
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
 
 }
 
@@ -53,6 +53,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.runtime.saved.instance.state)
+    implementation(libs.junit.junit)
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -65,6 +68,19 @@ dependencies {
     implementation("io.ktor:ktor-client-android:3.1.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0") // Añadir esta línea
     implementation ("com.google.accompanist:accompanist-permissions:0.37.2")
+
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
+    // Testing
+    testImplementation (libs.junit)
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.kotlin)
+    testImplementation (libs.kotlinx.coroutines.test)
+    androidTestImplementation (libs.androidx.junit.v113)
+
+    implementation("org.slf4j:slf4j-api:2.0.16")
+
 
 
 }
