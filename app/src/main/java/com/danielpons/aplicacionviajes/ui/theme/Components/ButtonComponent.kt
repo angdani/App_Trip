@@ -23,8 +23,9 @@ fun AddTripButton(onClick: () -> Unit) {
         Text(
             text = "Añadir Viaje",
             textAlign = TextAlign.Right,
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.DarkGray,
+            style = MaterialTheme.typography.titleMedium.copy(
+                color = MaterialTheme.colorScheme.primary,
+            ),
             modifier = Modifier.padding(end = 10.dp)
         )
 
@@ -32,5 +33,4 @@ fun AddTripButton(onClick: () -> Unit) {
             Icon(Icons.Default.Add, contentDescription = "Añadir Viaje", tint = Color.LightGray)
         }
     }
-
 }

@@ -2,6 +2,7 @@ package com.danielpons.aplicacionviajes.ui.theme.Components.listsObjects
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,14 +20,18 @@ fun TripList(
     trips: List<Trip>,
     padding: PaddingValues
 ) {
-    LazyColumn(modifier = Modifier.padding(padding)) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(padding)
+            .fillMaxSize()
+    ) {
         item {
             Spacer(modifier = Modifier.height(25.dp)) // Espaciado superior
         }
         items(trips) { trip ->
             // Para cada viaje en la lista, se muestra un item clickeable
             TripItem(trip) { selectedTrip ->
-                navController.navigate("trip_details/${selectedTrip.id_trip}") // Navega a la pantalla de detalles del viaje
+                navController.navigate("trip_pager/${trip.id_trip}")
             }
         }
     }

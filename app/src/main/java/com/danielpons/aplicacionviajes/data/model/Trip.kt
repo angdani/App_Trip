@@ -1,18 +1,21 @@
 package com.danielpons.apptrip.model
 
 import kotlinx.datetime.Instant
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Trip(
-    val id_trip: Int?,                // Puede ser null al crearlo, porque lo genera el backend
+    val id_trip: Int?,
     val name: String,
-    val startDate: String?,      // Usamos String para simplificar la conversión de fechas con Retrofit
-    val endDate: String?,
+    @SerialName("start_date")
+    val startDate: String? = null,
+    @SerialName("end_date")// Valor predeterminado
+    val endDate: String? = null,    // Valor predeterminado
     val description: String? = null,
     val cover_image_url: String? = null,
     val status: TripStatus = TripStatus.PLANNED,
-    val created_by: Long? = null,
+    val created_by: String? = null,
     val created_at: Instant? = null,
     val updated_at: Instant? = null,
     val is_public: Boolean = false,
@@ -20,8 +23,16 @@ data class Trip(
     val last_modified: Instant? = null,
     val server_id: Int? = null
 ) {
+    @Serializable
     enum class TripStatus {
-        PLANNED, IN_PROGRESS, COMPLETED, CANCELLED
+        @SerialName("planned")
+        PLANNED,
+        @SerialName("in_progress")
+        IN_PROGRESS,
+        @SerialName("completed")
+        COMPLETED,
+        @SerialName("cancelled")
+        CANCELLED
     }
 }
 

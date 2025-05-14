@@ -1,33 +1,49 @@
 package com.danielpons.aplicacionviajes.ui.theme.Components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.danielpons.aplicacionviajes.navigation.Screen
-import io.ktor.websocket.Frame
-
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        Screen.Home,
-        Screen.Profile
+        Screen.Home to Icons.Default.LocationOn, // Icono de avión para Home
+        Screen.Profile to Icons.Default.Person,
+        Screen.Notification to Icons.Default.Email// Icono de perfil de usuario para Profile
     )
 
-    NavigationBar {
-        items.forEach { screen ->
+    NavigationBar(
+        modifier = Modifier.clip(MaterialTheme.shapes.medium) // Bordes redondeados
+    ) {
+        items.forEach { (screen, icon) ->
             NavigationBarItem(
-                label = { Frame.Text(screen.title) },
+                label = { Text(screen.title) },
                 selected = navController.currentDestination?.route == screen.route,
                 onClick = { navController.navigate(screen.route) },
                 icon = {
-                    // Puedes agregar íconos aquí si lo deseas
-                    Icon(Icons.Default.Home, contentDescription = screen.title)
+                    Icon(icon, contentDescription = screen.title)
                 }
             )
         }
     }
 }
+@Composable
+@Preview
+fun PreviewBottomNavigationBar() {
+    val navController = rememberNavController()
+    BottomNavigationBar(navController = navController)
+}
+
+

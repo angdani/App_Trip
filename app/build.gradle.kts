@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.junit.junit)
     implementation(libs.core.ktx)
     implementation(libs.androidx.navigation.testing)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,8 +80,8 @@ dependencies {
     testImplementation (libs.kotlinx.coroutines.test)
     androidTestImplementation (libs.androidx.junit.v113)
 
+    testImplementation ("io.mockk:mockk:1.13.5")
     implementation("org.slf4j:slf4j-api:2.0.16")
-
-
-
+    implementation ("com.google.maps.android:maps-compose:2.11.0")
+    implementation ("com.google.accompanist:accompanist-pager:0.34.0")
 }

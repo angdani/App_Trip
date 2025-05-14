@@ -32,7 +32,4 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
         }
     }
 
-    suspend fun addTrip(trip: Trip): Trip {
-        return repository.addTrip(trip)
-    }
 }

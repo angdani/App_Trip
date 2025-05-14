@@ -10,7 +10,7 @@ class SupabaseUserTest {
     private val supabaseConnection = SupabaseConnection()
 
     @Test
-     fun testRegisterUser(): Unit = runBlocking {
+    fun testRegisterUser(): Unit = runBlocking {
         val email = "ejemplo@ejemplo"
         val password = "1234"
         val name = "Daniel"
@@ -22,4 +22,14 @@ class SupabaseUserTest {
 
     }
 
+    @Test
+    fun testGetUserByEmail(): Unit = runBlocking {
+        val user = userRepository.getUserByUsername("ejemplo@ejemplo")
+        println("Usuario obtenido:")
+        if (user != null) {
+            println(user.username)
+        }
+
+
+    }
 }
