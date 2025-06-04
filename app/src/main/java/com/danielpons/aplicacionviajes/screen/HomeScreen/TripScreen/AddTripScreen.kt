@@ -1,4 +1,4 @@
-package com.danielpons.aplicacionviajes.screen
+package com.danielpons.aplicacionviajes.screen.HomeScreen.TripScreen
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.*

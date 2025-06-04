@@ -32,7 +32,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     var passwordVisible by remember { mutableStateOf(false) }
     val userRepository = UserRepository()
-    var user : User?
+    var user: User?
     var loginSuccess = false
 
     Column(
@@ -57,21 +57,21 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
-TextField(
-    value = password,
-    onValueChange = { password = it },
-    label = { Text("Contraseña") },
-    visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-    trailingIcon = {
-        val image = if (passwordVisible) painterResource(id = R.drawable.ic_visibility_on)
-        else painterResource(id = R.drawable.ic_visibility_off)
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Contraseña") },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible) painterResource(id = R.drawable.ic_visibility_on)
+                else painterResource(id = R.drawable.ic_visibility_off)
 
-        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-            Icon(painter = image, contentDescription = null)
-        }
-    },
-    modifier = Modifier.fillMaxWidth()
-)
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(painter = image, contentDescription = null)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
@@ -79,11 +79,19 @@ TextField(
                 if (username.isNotEmpty() && password.isNotEmpty()) {
                     coroutineScope.launch {
                         //  lógica de inicio de sesión
-                      user =  userRepository.getUserRegistered(username, password)
-                        if(user != null) {
-                          UserSession.userId = user?.id_user
-                           android.util.Log.d("LoginScreen", "UserSession.userId actualizado a: ${UserSession.userId}")
-                             loginSuccess = true
+                        user = userRepository.getUserRegistered(username, password)
+                        if (user != null) {
+                            UserSession.userId = user?.id_user
+                            UserSession.userName = user?.username
+                            android.util.Log.d(
+                                "LoginScreen",
+                                "UserSession.userId actualizado a: ${UserSession.userId}",
+                            )
+                            android.util.Log.d(
+                                "LoginScreen",
+                                "UserSession.userName actualizado a: ${UserSession.userName}",
+                            )
+                            loginSuccess = true
                         }
                         if (loginSuccess) {
                             onLoginSuccess()

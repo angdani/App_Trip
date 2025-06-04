@@ -1,7 +1,4 @@
-package com.danielpons.aplicacionviajes.ui.theme.Components.itemComponent
-
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +16,15 @@ import com.danielpons.aplicacionviajes.ui.theme.DarkGray
 import com.danielpons.apptrip.model.Trip
 
 @Composable
-fun TripItem(trip: Trip, onClick: (Trip) -> Unit) {
+fun TripItem(
+    trip: Trip,
+    modifier: Modifier = Modifier,
+    onClick: (Trip) -> Unit,
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick(trip) }
             .background(Blue.copy(alpha = 0.1f))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -40,27 +40,25 @@ fun TripItem(trip: Trip, onClick: (Trip) -> Unit) {
                     style = MaterialTheme.typography.bodyMedium,
                     color = DarkGray
                 )
-                Spacer(modifier = Modifier.width(4.dp)) // Espaciado entre el texto y la fecha
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = trip.startDate.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = DarkGray
                 )
-                Spacer(modifier = Modifier.width(8.dp)) // Espaciado entre la fecha de inicio y la de fin
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Hasta: ",
                     style = MaterialTheme.typography.bodyMedium,
                     color = DarkGray
                 )
-                Spacer(modifier = Modifier.width(4.dp)) // Espaciado entre el texto y la fecha
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = trip.endDate.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = DarkGray
                 )
-
             }
-
         }
     }
 }

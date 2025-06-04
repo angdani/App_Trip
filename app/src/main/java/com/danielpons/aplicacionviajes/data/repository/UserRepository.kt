@@ -1,16 +1,11 @@
 package com.danielpons.aplicacionviajes.data.repository
 
-import android.annotation.SuppressLint
 import com.danielpons.aplicacionviajes.data.connection.SupabaseConnection
 import com.danielpons.aplicacionviajes.data.model.User
-import com.danielpons.apptrip.model.Trip
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.rpc
-import kotlinx.serialization.json.Json
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.put
 
 class UserRepository {
@@ -49,6 +44,33 @@ class UserRepository {
         ).select().decodeList<User>()
 
         return listUsers
+    }
+
+    suspend fun getUsersNames(): List<String> {
+        val listUsernames = supabase.from(
+            "users"
+        ).select(
+            columns = Columns.list(
+                "username"
+            )
+        ).decodeList<User>()
+
+        return listUsernames.map { it.username }
+    }
+
+    suspend fun getIdUser(username: String): String {
+        val idUser = supabase.from(
+            "users"
+        ).select(
+
+            columns = Columns.list(
+                "id_user"
+            )
+        ){
+            filter { eq("username", username ) }
+        }.decodeSingleOrNull<String>()
+
+        return idUser ?: throw Exception("User not found")
     }
 
     suspend fun getUserByUsername(username: String): User? {

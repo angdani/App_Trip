@@ -8,8 +8,11 @@ import androidx.navigation.compose.*
 import com.danielpons.aplicacionviajes.data.global.UserSession
 import com.danielpons.aplicacionviajes.screen.HomeScreen.HomeScreen
 import com.danielpons.aplicacionviajes.screen.HomeScreen.ProfileScreen
+import com.danielpons.aplicacionviajes.screen.HomeScreen.TripScreen.AddTripScreen
+import com.danielpons.aplicacionviajes.screen.HomeScreen.EditUserScreen
 import com.danielpons.aplicacionviajes.screen.loginScreen.LoginScreen
 import com.danielpons.aplicacionviajes.screen.loginScreen.RegisterUserScreen
+import com.danielpons.aplicacionviajes.screen.tripDetailsScreen.SendNotificationScreen
 import com.danielpons.aplicacionviajes.ui.theme.AplicacionViajesTheme
 import com.danielpons.aplicacionviajes.ui.theme.Components.pagerState.PagerScreen
 
@@ -29,6 +32,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp() {
     val navController = rememberNavController()
+
 val startDestination = if (UserSession.userId?.toString().isNullOrEmpty()) "login" else "home"
     // Actualiza el userId después del inicio de sesión
     NavHost(navController, startDestination = startDestination) {
@@ -56,5 +60,10 @@ val startDestination = if (UserSession.userId?.toString().isNullOrEmpty()) "logi
             val tripId = backStackEntry.arguments?.getString("tripId")
             PagerScreen(navController) // Por ahora no usas tripId
         }
+        composable("send_notification") {
+           SendNotificationScreen(navController)
+        }
+        composable("edit_userScreen") {
+            EditUserScreen(navController) }
     }
 }

@@ -34,5 +34,22 @@ data class Trip(
         @SerialName("cancelled")
         CANCELLED
     }
-}
 
+  //Constructor para crear un viaje vácio
+    constructor() : this(
+        id_trip = null,
+        name = "",
+        startDate = null,
+        endDate = null,
+        description = null,
+        cover_image_url = null,
+        status = TripStatus.PLANNED,
+        created_by = null,
+        created_at = null,
+        updated_at = null,
+        is_public = false,
+        is_dirty = false,
+        last_modified = null,
+        server_id = null
+    )
+}

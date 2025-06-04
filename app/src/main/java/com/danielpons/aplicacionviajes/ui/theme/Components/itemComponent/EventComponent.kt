@@ -12,14 +12,19 @@ import androidx.compose.ui.unit.dp
 import com.danielpons.aplicacionviajes.data.model.Event
 import kotlinx.datetime.Clock
 import kotlinx.datetime.plus
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import java.util.Locale
+import java.time.format.DateTimeFormatter
+val formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'a las' HH:mm", Locale("es", "ES"))
 
 @Composable
-fun EventItem(event: Event, onClick: (Event) -> Unit) {
+fun EventItem(event: Event) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onClick(event) }
+            .padding(4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -35,30 +40,25 @@ fun EventItem(event: Event, onClick: (Event) -> Unit) {
                 )
             }
 
+            val startDateTime =
+                event.start_datetime.toLocalDateTime(TimeZone.currentSystemDefault())
             Text(
-                text = "Inicio: ${event.start_datetime}",
+                text = "Inicio: ${startDateTime.toJavaLocalDateTime().format(formatter)}",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 8.dp)
             )
 
             event.end_datetime?.let {
+                val endDateTime = it.toLocalDateTime(TimeZone.currentSystemDefault())
                 Text(
-                    text = "Fin: $it",
+                    text = "Fin: ${endDateTime.toJavaLocalDateTime().format(formatter)}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
 
-            event.location?.let {
+            event.created_by?.let {
                 Text(
-                    text = "Ubicación: $it",
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
-
-            event.cost?.let {
-                Text(
-                    text = "Costo: $it ${event.cost_currency}",
+                    text = "Creador: $it",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -79,10 +79,8 @@ fun PreviewEventItem() {
             description = "Descripción del evento de prueba",
             start_datetime = Clock.System.now(),
             end_datetime = Clock.System.now().plus(3600, kotlinx.datetime.DateTimeUnit.SECOND),
-            location = "Ubicación de prueba",
-            cost = 50.0,
-            cost_currency = "USD"
-        ),
-        onClick = {}
+            location = "Zaragoza",
+            created_by = "Usuario de prueba",
+        )
     )
 }

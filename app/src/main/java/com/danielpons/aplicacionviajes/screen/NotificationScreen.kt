@@ -1,5 +1,7 @@
 package com.danielpons.aplicacionviajes.screen
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,38 +13,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.danielpons.aplicacionviajes.data.global.UserSession
 import com.danielpons.aplicacionviajes.data.model.Notification
+import com.danielpons.aplicacionviajes.data.model.TripParticipant
+import com.danielpons.aplicacionviajes.data.repository.NotificationRepository
+import com.danielpons.aplicacionviajes.data.repository.TripParticipantRepository
+import com.danielpons.aplicacionviajes.data.repository.UserRepository
 import com.danielpons.aplicacionviajes.ui.theme.Components.BottomNavigationBar
+import kotlinx.coroutines.launch
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationScreen(navController: NavController) {
-    var notifications by remember {
-        mutableStateOf(
-            listOf(
-                Notification(
-                    id = 1,
-                    title = "Invitación de Ana",
-                    message = "¿Quieres unirte al viaje a la playa con Ana?",
-                    date = "2024-06-01",
-                    isRead = false
-                ),
-                Notification(
-                    id = 2,
-                    title = "Invitación de Carlos",
-                    message = "Carlos te ha invitado a un viaje a París. ¿Te gustaría aceptar?",
-                    date = "2024-06-02",
-                    isRead = false
-                ),
-                Notification(
-                    id = 3,
-                    title = "Invitación de Lucía",
-                    message = "Lucía te ha invitado a una excursión al bosque. ¿Te apuntas?",
-                    date = "2024-06-03",
-                    isRead = false
-                )
-            )
-        )
+    val notificationRepository = NotificationRepository()
+    val userRepository = UserRepository()
+    val tripParticipantRepository = TripParticipantRepository()
+    val notifications = remember { mutableStateListOf<Notification>() } // Recordar el estado
+    var idUserRecive: String? = null
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        UserSession.userName?.let { userName ->
+            val result = notificationRepository.getNotificationsByUserName(userName)
+            notifications.clear() // Asegurarse de que no haya duplicados
+            notifications.addAll(result) // Agregar las notificaciones
+
+        }
     }
 
     Scaffold(
@@ -71,7 +67,7 @@ fun NotificationScreen(navController: NavController) {
                     .padding(padding)
                     .padding(16.dp)
             ) {
-                items(notifications, key = { it.id }) { notification ->
+                items(notifications, key = { it.id!! }) { notification ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -87,7 +83,7 @@ fun NotificationScreen(navController: NavController) {
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
-                                text = notification.date,
+                                text = " ${notification.createAt}",
                                 style = MaterialTheme.typography.labelSmall
                             )
                             Spacer(modifier = Modifier.height(8.dp))
@@ -102,8 +98,41 @@ fun NotificationScreen(navController: NavController) {
                             ) {
                                 Button(
                                     onClick = {
-                                        notifications =
-                                            notifications.filter { it.id != notification.id }
+                                        scope.launch {
+                                            try {
+                                                Log.d(
+                                                    "NotificationScreen",
+                                                    "Intentando aceptar notificación con ID: ${notification.id}"
+                                                )
+
+                                                    tripParticipantRepository.addParticipant(
+                                                        TripParticipant(
+                                                            id_trip = notification.idTrip ?: 0,
+                                                            id_user = UserSession.userId,
+                                                            is_dirty = true,
+                                                            role = "viewer"
+                                                        )
+                                                    )
+                                                    Log.d(
+                                                        "NotificationScreen",
+                                                        "Participante agregado correctamente"
+                                                    )
+                                                notificationRepository.deleteNotification(
+                                                    notification.id!!
+                                                )
+                                                notifications.removeIf { it.id == notification.id }
+                                                Log.d(
+                                                    "NotificationScreen",
+                                                    "Notificación aceptada correctamente"
+                                                )
+                                            } catch (e: Exception) {
+                                                Log.e(
+                                                    "NotificationScreen",
+                                                    "Error al aceptar notificación: ${e.message}",
+                                                    e
+                                                )
+                                            }
+                                        }
                                     },
                                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                                 ) {
@@ -112,8 +141,30 @@ fun NotificationScreen(navController: NavController) {
                                 Spacer(modifier = Modifier.width(8.dp))
                                 OutlinedButton(
                                     onClick = {
-                                        notifications =
-                                            notifications.filter { it.id != notification.id }
+                                        scope.launch {
+                                            try {
+                                                Log.d(
+                                                    "NotificationScreen",
+                                                    "Intentando rechazar notificación con ID: ${notification.id}"
+                                                )
+
+
+                                                notificationRepository.deleteNotification(
+                                                    notification.id!!
+                                                )
+                                                notifications.removeIf { it.id == notification.id }
+                                                Log.d(
+                                                    "NotificationScreen",
+                                                    "Notificación rechazada correctamente"
+                                                )
+                                            } catch (e: Exception) {
+                                                Log.e(
+                                                    "NotificationScreen",
+                                                    "Error al rechazar notificación: ${e.message}",
+                                                    e
+                                                )
+                                            }
+                                        }
                                     }
                                 ) {
                                     Text("Rechazar")
@@ -123,13 +174,11 @@ fun NotificationScreen(navController: NavController) {
                     }
                 }
             }
-
         }
-
-
     }
 
 }
+
 
 @Preview(showBackground = true)
 @Composable

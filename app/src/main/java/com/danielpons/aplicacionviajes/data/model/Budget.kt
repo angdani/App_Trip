@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Budget(
     val id_budget: Int? = null,
-    val id_trip: Int,
     val category: String,
     val planned_amount: Double,
     val actual_amount: Double = 0.0,
