@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +28,9 @@ import com.danielpons.aplicacionviajes.ui.theme.Components.AddTripButton
 import com.danielpons.aplicacionviajes.ui.theme.Components.BottomNavigationBar
 import com.danielpons.aplicacionviajes.ui.theme.Components.DropDown.DropdownMenuOrderTrip
 import com.danielpons.aplicacionviajes.ui.theme.Components.listsObjects.TripList
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
     var showAddTripDialog by remember { mutableStateOf(false) }
@@ -36,108 +39,126 @@ fun HomeScreen(navController: NavController) {
     val userId = UserSession.userId
     var expanded by remember { mutableStateOf(false) } // Controla el menú desplegable
     var sortOption by remember { mutableStateOf("Por defecto") } // Opción seleccionada
+    var isRefreshing by remember { mutableStateOf(false) } // Controla el estado de refresco
+    val corroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
+    val pullToRefreshState = rememberPullToRefreshState()
+    suspend fun refreshTrips() {
+        isRefreshing = true
         val trips = userId?.let { tripRepository.getTripsByUserId(it) }
+        listTrip.clear()
         if (trips != null) {
             listTrip.addAll(trips)
         }
+        isRefreshing = false
     }
 
-    if (showAddTripDialog) {
-        Dialog(onDismissRequest = { showAddTripDialog = false }) {
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                tonalElevation = 8.dp,
-                modifier = Modifier
-                    .fillMaxHeight(0.5f)
-            ) {
-                AddTripScreen(
-                    navController = navController,
-                    onDismiss = { showAddTripDialog = false }
+
+
+
+
+// Refresca la lista de viajes al iniciar la pantalla
+LaunchedEffect(Unit) {
+    refreshTrips()
+}
+
+if (showAddTripDialog) {
+    Dialog(onDismissRequest = { showAddTripDialog = false }) {
+        Surface(
+            shape = RoundedCornerShape(16.dp),
+            tonalElevation = 8.dp,
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+        ) {
+            AddTripScreen(
+                navController = navController,
+                onDismiss = { showAddTripDialog = false }
+            )
+        }
+    }
+}
+
+
+
+Scaffold(
+floatingActionButton = {
+    AddTripButton { showAddTripDialog = true }
+},
+bottomBar = {
+    BottomNavigationBar(navController = navController)
+}
+) {
+    padding ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)
+            .padding(16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                //Logo de la app
+                Image(
+                    painter = painterResource(id = R.drawable.logoapp),
+                    contentDescription = "Logo de la app",
+                    modifier = Modifier
+                        .size(250.dp)
+                        .padding()
+                )
+                //Texto de bienvenida
+                Text(
+                    text = "¡Crea tus propios viajes!",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        shadow = Shadow(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                            offset = Offset(2f, 2f),
+                            blurRadius = 4f
+                        )
+                    ),
+                    modifier = Modifier
+                        .padding(bottom = 3.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
         }
-    }
-
-    Scaffold(
-        floatingActionButton = {
-            AddTripButton { showAddTripDialog = true }
-        },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        }
-    ) { padding ->
-        Column(
+        DropdownMenuOrderTrip(
+            expanded = expanded,
+            onExpandedChange = { expanded = it },
+            sortOption = sortOption,
+            onSortOptionSelected = { sortOption = it },
+            listTrip = listTrip
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(bottom = 72.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    //Logo de la app
-                    Image(
-                        painter = painterResource(id = R.drawable.logoapp),
-                        contentDescription = "Logo de la app",
-                        modifier = Modifier
-                            .size(250.dp)
-                            .padding()
-                    )
-                    //Texto de bienvenida
-                    Text(
-                        text = "¡Crea tus propios viajes!",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold,
-                            shadow = Shadow(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                                offset = Offset(2f, 2f),
-                                blurRadius = 4f
-                            )
-                        ),
-                        modifier = Modifier
-                            .padding(bottom = 3.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.08f),
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-                }
-            }
-            DropdownMenuOrderTrip(
-                expanded = expanded,
-                onExpandedChange = { expanded = it },
-                sortOption = sortOption,
-                onSortOptionSelected = { sortOption = it },
-                listTrip = listTrip
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(bottom = 72.dp)
-            ) {
 
-                if (listTrip.isEmpty()) {
-                    Text(
-                        text = "No hay viajes disponibles",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = DarkGray,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                } else {
-                    TripList(navController, listTrip, PaddingValues(0.dp))
-                }
+            if (listTrip.isEmpty()) {
+                Text(
+                    text = "No hay viajes disponibles",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = DarkGray,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            } else {
+                TripList(navController, listTrip, PaddingValues(0.dp))
             }
         }
     }
+}
 }
 
 

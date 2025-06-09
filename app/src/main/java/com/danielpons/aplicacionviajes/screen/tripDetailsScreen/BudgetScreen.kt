@@ -103,8 +103,9 @@ fun BudgetScreen() {
                 }
             )
 
-            ExpenseListScreen(initialExpenses = filteredExpenses)
-
+ExpenseListScreen(
+                initialExpenses = filteredExpenses,
+            )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

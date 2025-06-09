@@ -95,9 +95,20 @@ class UserRepository {
       return user
   }
 
+    suspend fun deleteUser(username: String, idUser : String) {
+        supabase.from("trip_participants")
+            .delete{
+                filter { eq("id_user", idUser) }
+            }
+       supabase.from("users")
+            .delete{
+                filter { eq("username", username) }
+            }
+            }
+    }
 
 
 
 
 
-}
+

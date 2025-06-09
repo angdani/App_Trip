@@ -2,7 +2,6 @@ package com.danielpons.aplicacionviajes.data.repository
 
 import com.danielpons.aplicacionviajes.data.connection.SupabaseConnection
 import com.danielpons.aplicacionviajes.data.model.Expense
-import com.danielpons.aplicacionviajes.data.model.Notification
 import io.github.jan.supabase.postgrest.from
 
 class ExpenseRepository {

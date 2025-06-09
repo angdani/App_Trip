@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 
@@ -30,7 +31,17 @@ fun AddTripButton(onClick: () -> Unit) {
         )
 
         FloatingActionButton(onClick = onClick) {
-            Icon(Icons.Default.Add, contentDescription = "Añadir Viaje", tint = Color.LightGray)
+            Icon(
+                Icons.Default.Add,
+                contentDescription = "Añadir Viaje",
+                tint = Color(0xFF1A237E) 
+            )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewAddTripButton() {
+    AddTripButton(onClick = {})
 }
